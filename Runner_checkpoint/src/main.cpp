@@ -126,6 +126,19 @@ void setup()
 
 void loop()
 {
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.println("Disconnected from WiFi");
+    //  Realizar acciones adicionales si se desconecta
+    WifiSetup::ScanNet();
+    WifiSetup::Connect();
+    // delete serverhttp;
+    // serverhttp = new ServerHTTP();
+    Serial.print("http://");
+    Serial.print(WiFi.localIP());
+    Serial.println((String) ":" + ConfigServer::port);
+  }
+
   if (!radio.isChipConnected())
   {
     cout << "chip not connected" << endl;
@@ -146,7 +159,7 @@ void loop()
   }
 
   // Check if the lector is connected
-  if (!mfrc522.PCD_PerformSelfTest())
+  if (mfrc522.PCD_PerformSelfTest())
   {
     mfrc522.PCD_Init();
     mfrc522.PCD_AntennaOn();
