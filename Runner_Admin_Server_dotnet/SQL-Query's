@@ -1,0 +1,32 @@
+CREATE FUNCTION dbo.GetDateTimeInTimeZone()
+RETURNS datetimeoffset
+AS
+BEGIN
+    DECLARE @Result datetimeoffset;
+
+    SET @Result = CONVERT(datetimeoffset, SYSDATETIMEOFFSET()) AT TIME ZONE 'Central Standard Time';
+
+    RETURN @Result;
+END;
+
+SELECT dbo.GetDateTimeInTimeZone() AS CurrentDateTimeInSpecifiedTimeZone;
+
+
+CREATE TABLE TarjetasRFID (
+    ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    UID VARCHAR(8) NOT NULL,
+    NombreTarjeta VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE RegistrosEventos (
+    ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    ID_Tarjeta INT,
+    FechaHora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Evento VARCHAR(50),
+    FOREIGN KEY (ID_Tarjeta) REFERENCES TarjetasRFID(ID)
+);
+
+INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('73A8EAFC', 'Tarjeta 1')
+INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('538C1BF5', 'Tarjeta 2')
+INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('B3530712', 'Tarjeta 3')
+INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('9368850D', 'Tarjeta 4')
