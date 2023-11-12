@@ -28,7 +28,7 @@
 #include <MFRC522Debug.h>
 
 // Modules
-#include "Time.h"
+#include "TimeClock.h"
 
 // SPI bus pins for NRF24L01 radio
 #define VSPI_CE 4
@@ -126,7 +126,7 @@ void setup()
   else
     Serial.println(F("DEFECT or UNKNOWN"));
   Serial.println();
-  Time::Init();
+  TimeClock::Init();
 }
 
 void loop()
@@ -190,6 +190,7 @@ void loop()
   if (UID_Database.find(uidToString(newUid.uidByte, newUid.size)) != UID_Database.end())
   {
     cout << "UID " << UID_Tag << endl;
+    cout << "tiempo: " << TimeClock::GetTime() << endl;
   }
   else
   {
