@@ -102,7 +102,7 @@ void setup()
   // Lector RFID setup
   mfrc522.PCD_Init();
   mfrc522.PCD_AntennaOn();
-  mfrc522.PCD_SetAntennaGain(MFRC522::PCD_RxGain::RxGain_max);
+  // mfrc522.PCD_SetAntennaGain(MFRC522::PCD_RxGain::RxGain_max);
 
   // Test lector RFID
   MFRC522Debug::PCD_DumpVersionToSerial(mfrc522, Serial);
@@ -120,7 +120,7 @@ void loop()
 {
 
   // Check if the lector is connected
-  if (mfrc522.PCD_PerformSelfTest())
+  if (!mfrc522.PCD_PerformSelfTest())
   {
     mfrc522.PCD_Init();
     mfrc522.PCD_AntennaOn();
@@ -164,5 +164,5 @@ void loop()
       cout << "UID no encontrado en la base de datos: " << UID_Tag << endl;
     }
   }
-  delay(500);
+  delay(100);
 }
