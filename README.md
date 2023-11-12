@@ -1,6 +1,8 @@
 # Sistema de control de puntos de acceso
 
-### [Enlaces](/Diseños,%20Reportes,%20etc/Enlaces.md)
+### [Tareas y objetivos](/Diseños,%20Reportes,%20etc/Tareas%20y%20objetivos.md)
+
+### [Enlaces de ayuda](/Diseños,%20Reportes,%20etc/Enlaces.md)
 
 ### [Sensores y materiales](/Diseños,%20Reportes,%20etc/Sensores%20y%20materiales.md)
 
