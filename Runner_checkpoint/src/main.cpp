@@ -12,6 +12,7 @@
 #include "WifiSetup.h"
 #include "Server.hpp"
 #include "config.h"
+ServerHTTP *serverhttp;
 // Flash File System
 #include <SPIFFS.h>
 // Bus SPI
@@ -92,7 +93,10 @@ void setup()
   SPIFFS.begin(true);
   WifiSetup::ScanNet();
   WifiSetup::Connect();
-
+  serverhttp = new ServerHTTP();
+  Serial.print("http://");
+  Serial.print(WiFi.localIP());
+  Serial.println((String) ":" + ConfigServer::port);
   // Buzzer setup
   pinMode(BUZZER_PIN, OUTPUT);
   // ledcSetup(channel, frequency, resolution): Config pwm
