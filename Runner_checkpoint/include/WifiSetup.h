@@ -1,7 +1,6 @@
 #include <WiFi.h>
 #include "config.h"
 
-
 class WifiSetup
 {
 private:

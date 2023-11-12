@@ -2,8 +2,8 @@
 
 namespace ConfigNet
 {
-  const char *ssid = "nombre de la red";
-  const char *pass = "contrasena";
+  const char *ssid = "INFINITUM01CF";
+  const char *pass = "SK35v3Kks5";
 }
 
 namespace ConfigServer

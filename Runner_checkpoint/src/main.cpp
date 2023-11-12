@@ -9,6 +9,9 @@
 // Web server
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include "WifiSetup.h"
+#include "Server.hpp"
+#include "config.h"
 // Flash File System
 #include <SPIFFS.h>
 // Bus SPI
@@ -82,6 +85,9 @@ std::string uidToString(const byte *uidBytes, byte bufferSize)
 void setup()
 {
   Serial.begin(9600);
+  SPIFFS.begin(true);
+  WifiSetup::ScanNet();
+  WifiSetup::Connect();
 
   // Buzzer setup
   pinMode(BUZZER_PIN, OUTPUT);

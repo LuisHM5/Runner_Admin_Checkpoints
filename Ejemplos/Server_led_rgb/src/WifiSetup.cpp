@@ -1,4 +1,5 @@
 #include "WifiSetup.h"
+
 void WifiSetup::Connect()
 {
   WiFi.begin(ConfigNet::ssid, ConfigNet::pass);

@@ -23,5 +23,25 @@ ServerHTTP::ServerHTTP()
 
 void ServerHTTP::init()
 {
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (SPIFFS.exists("/index.html")) {
+        request->send(SPIFFS, "/index.html", "text/html");
+    } else {
+        request->send(404, "text/plain", "Archivo no encontrado");
+    } });
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/style.css", "text/css"); });
 
+  server.on("/tinycolor.js", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/tinycolor.js", "application/javascript"); });
+
+  server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/script.js", "application/javascript"); });
+
+  server.onNotFound([](AsyncWebServerRequest *request)
+                    { request->send(400, "text/plain", "Not found"); });
+  server.begin();
+  Serial.println("HTTP Server is listening on port: ");
+  Serial.println(ConfigServer::port);
 }
