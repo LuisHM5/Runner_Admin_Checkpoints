@@ -85,7 +85,7 @@ std::string uidToString(const byte *uidBytes, byte bufferSize)
 
   return uidStringStream.str();
 }
-
+void PrintAllCards();
 void setup()
 {
   Serial.begin(9600);
@@ -191,6 +191,13 @@ void loop()
   {
     cout << "UID " << UID_Tag << endl;
     cout << "tiempo: " << TimeClock::GetTime() << endl;
+    if (Cards_Readed.find(UID_Tag) != Cards_Readed.end())
+    {
+      cout << "UID ya leido: " << UID_Tag << endl;
+      return;
+    }
+    Cards_Readed.insert({UID_Tag, TimeClock::GetTime()});
+    PrintAllCards();
   }
   else
   {
@@ -198,4 +205,12 @@ void loop()
   }
 
   // delay(100);
+}
+
+void PrintAllCards()
+{
+  for (auto &card : Cards_Readed)
+  {
+    cout << "UID: " << card.first << " - " << card.second << endl;
+  }
 }
