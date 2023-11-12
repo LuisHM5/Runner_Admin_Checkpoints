@@ -30,6 +30,13 @@ void ServerHTTP::init()
     } else {
         request->send(404, "text/plain", "Archivo no encontrado");
     } });
+  server.on("/formulario.html", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    if (SPIFFS.exists("/formulario.html")) {
+        request->send(SPIFFS, "/formulario.html", "text/html");
+    } else {
+        request->send(404, "text/plain", "Archivo no encontrado");
+    } });
   server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/style.css", "text/css"); });
 
