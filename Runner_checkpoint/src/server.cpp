@@ -15,7 +15,7 @@ ServerHTTP::ServerHTTP()
   <head>
   <meta charset=utf-8>
   <meta name=viewport content="width=device-width,initial-scale=1">
-  
+
   </head>
   <body>
   <h2>Wemos Server</h2>
@@ -32,9 +32,6 @@ void ServerHTTP::init()
     } });
   server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/style.css", "text/css"); });
-
-  server.on("/tinycolor.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/tinycolor.js", "application/javascript"); });
 
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/script.js", "application/javascript"); });

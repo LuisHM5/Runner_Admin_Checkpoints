@@ -12,7 +12,7 @@
 #include "WifiSetup.h"
 #include "Server.hpp"
 #include "config.h"
-ServerHTTP *serverhttp;
+
 // Flash File System
 #include <SPIFFS.h>
 // Bus SPI
@@ -49,6 +49,7 @@ ServerHTTP *serverhttp;
 // Buzzer
 #define BUZZER_PIN 26
 
+ServerHTTP *serverhttp;
 // SPI bus instances
 SPIClass *vspi = new SPIClass(VSPI);
 SPIClass *hspi = new SPIClass(HSPI);
