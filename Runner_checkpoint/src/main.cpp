@@ -6,7 +6,11 @@
 #include <array>
 #include <iomanip>
 #include <sstream>
-
+// Web server
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+// Flash File System
+#include <SPIFFS.h>
 // Bus SPI
 #include <SPI.h>
 

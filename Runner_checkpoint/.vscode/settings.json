@@ -282,6 +282,7 @@
     "*.excalidraw": "json",
     "*.excalidrawlib": "json",
     "*.php": "php",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "sstream": "cpp"
   }
 }
