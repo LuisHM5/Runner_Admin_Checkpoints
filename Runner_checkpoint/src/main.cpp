@@ -30,6 +30,7 @@
 
 // Modules
 #include "TimeClock.h"
+#include "CardsManager.h"
 
 // SPI bus pins for NRF24L01 radio
 #define VSPI_CE 4
@@ -48,8 +49,12 @@
 
 // Buzzer
 #define BUZZER_PIN 26
-
+// ServerHTTP instance
 ServerHTTP *serverhttp;
+
+// Cards manager
+CardsManager *cardsManager = new CardsManager();
+
 // SPI bus instances
 SPIClass *vspi = new SPIClass(VSPI);
 SPIClass *hspi = new SPIClass(HSPI);
@@ -67,14 +72,6 @@ const uint64_t pipeAddress = 0xE8E8F0F0E1LL; // Must be the same in the receiver
 
 using namespace std;
 
-// Map of UID's
-uint8_t UID_Lecture[4];
-unordered_map<std::string, std::string> UID_Database = {
-    {"73A8EAFC", "Tarjeta 1"},
-    {"538C1BF5", "Tarjeta 2"},
-    {"B3530712", "Tarjeta 3"}};
-unordered_map<std::string, std::string> Cards_Readed;
-
 // UID to string converter
 std::string uidToString(const byte *uidBytes, byte bufferSize)
 {
@@ -87,7 +84,7 @@ std::string uidToString(const byte *uidBytes, byte bufferSize)
 
   return uidStringStream.str();
 }
-void PrintAllCards();
+
 void setup()
 {
   Serial.begin(9600);
@@ -100,7 +97,7 @@ void setup()
   Serial.println((String) ":" + ConfigServer::port);
   // Buzzer setup
   pinMode(BUZZER_PIN, OUTPUT);
-  // ledcSetup(channel, frequency, resolution): Config pwm
+
   ledcSetup(0, 1000, 10); // Configura el canal LEDC 0
   ledcAttachPin(BUZZER_PIN, 0);
 
@@ -165,6 +162,8 @@ void loop()
     {
       Serial.print("Datos recibidos:");
       cout << UID_Tag << endl;
+      string Time = TimeClock::GetTime();
+      cardsManager->AddCard(UID_Tag, Time);
     }
   }
 
@@ -186,36 +185,15 @@ void loop()
 
   // Card detected and readable
   cout << "Tarjeta detectada" << endl;
+
+  // Save the UID and the time
+  string Time = TimeClock::GetTime();
   auto newUid = mfrc522.uid;
 
+  // halt mr522
   mfrc522.PICC_HaltA();
 
+  // Transform the UID to string and save it
   string UID_Tag = uidToString(newUid.uidByte, newUid.size);
-
-  if (UID_Database.find(uidToString(newUid.uidByte, newUid.size)) != UID_Database.end())
-  {
-    cout << "UID " << UID_Tag << endl;
-    cout << "tiempo: " << TimeClock::GetTime() << endl;
-    if (Cards_Readed.find(UID_Tag) != Cards_Readed.end())
-    {
-      cout << "UID ya leido: " << UID_Tag << endl;
-      return;
-    }
-    Cards_Readed.insert({UID_Tag, TimeClock::GetTime()});
-    PrintAllCards();
-  }
-  else
-  {
-    cout << "UID no encontrado en la base de datos: " << UID_Tag << endl;
-  }
-
-  // delay(100);
-}
-
-void PrintAllCards()
-{
-  for (auto &card : Cards_Readed)
-  {
-    cout << "UID: " << card.first << " - " << card.second << endl;
-  }
+  cardsManager->AddCard(UID_Tag, Time);
 }
