@@ -27,6 +27,9 @@
 #include <MFRC522DriverPinSimple.h>
 #include <MFRC522Debug.h>
 
+// Modules
+#include "Time.h"
+
 // SPI bus pins for NRF24L01 radio
 #define VSPI_CE 4
 #define VSPI_CSN 2
@@ -69,6 +72,7 @@ unordered_map<std::string, std::string> UID_Database = {
     {"538C1BF5", "Tarjeta 2"},
     {"B3530712", "Tarjeta 3"}};
 unordered_map<std::string, std::string> Cards_Readed;
+
 // UID to string converter
 std::string uidToString(const byte *uidBytes, byte bufferSize)
 {
@@ -122,6 +126,7 @@ void setup()
   else
     Serial.println(F("DEFECT or UNKNOWN"));
   Serial.println();
+  Time::Init();
 }
 
 void loop()

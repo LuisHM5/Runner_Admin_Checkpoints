@@ -1,4 +1,4 @@
-
+#pragma once
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
 #include "config.h"
