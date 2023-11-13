@@ -25,3 +25,5 @@
 ### [SPI Communication protocol](https://randomnerdtutorials.com/esp32-spi-communication-arduino)
 
 ### [Web server](https://randomnerdtutorials.com/esp32-async-web-server-espasyncwebserver-library/)
+
+### [Wifi manager](https://randomnerdtutorials.com/esp32-wi-fi-manager-asyncwebserver/)
