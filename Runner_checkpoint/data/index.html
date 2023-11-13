@@ -16,9 +16,17 @@
 
   <div class="main">
     <div class="button-container">
-      <button type="button" class="main-btn">
-        Iniciar Carrera
-      </button>
+      <!-- %ifInRace%
+      <h2>En carrera</h2>
+      %endifInRace% -->
+
+      <!-- %ifNotInRace% -->
+      <form action="/start-race" method="post">
+        <button type="submit" class="main-btn">
+          Iniciar Carrera
+        </button>
+      </form>
+      <!-- %endifNotInRace% -->
       <div>
         <a href="/formulario.html" class="main-btn red-btn">
           Conectarse a la red

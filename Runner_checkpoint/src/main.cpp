@@ -155,13 +155,11 @@ void loop()
 
   if (radio.available())
   {
-    // string UID_Tag;
     string message;
 
     radio.read(&message, sizeof(message));
-    cout << "Message:" << message.length() << endl;
     string UID_Tag(message);
-    cout << "UID_Tag:" << UID_Tag.length() << endl;
+
     if (UID_Tag.length() > 0)
     {
       newUID.assign(message);

@@ -1,3 +1,4 @@
+#pragma once
 #include <Wire.h>
 #include <RTClib.h>
 
@@ -6,6 +7,7 @@ class TimeClock
 private:
   static RTC_Millis rtc;
   static DateTime now;
+  static bool isInRace;
 
 public:
   TimeClock(){};
@@ -20,6 +22,13 @@ public:
   {
     Clear();
     now = rtc.now();
+    isInRace = true;
+  }
+
+  static void Stop()
+  {
+    Clear();
+    isInRace = false;
   }
 
   static std::string GetTime()
@@ -31,6 +40,11 @@ public:
     return std::to_string(now.hour()) + ":" + std::to_string(now.minute()) + ":" + std::to_string(now.second());
   }
 
+  static bool GetStatus()
+  {
+    return isInRace;
+  }
+
 private:
   static void Clear()
   {
@@ -38,6 +52,3 @@ private:
     rtc.adjust(DateTime(2023, 1, 1, 0, 0, 0));
   }
 };
-
-RTC_Millis TimeClock::rtc;
-DateTime TimeClock::now;
