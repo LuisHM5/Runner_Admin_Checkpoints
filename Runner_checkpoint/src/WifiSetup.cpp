@@ -3,8 +3,10 @@
 void WifiSetup::Connect()
 {
   WiFi.begin(ConfigNet::ssid, ConfigNet::pass);
-  while (WiFi.status() != WL_CONNECTED)
+  int tries = 5;
+  while (WiFi.status() != WL_CONNECTED && tries > 0)
   {
+    tries--;
     Serial.println("Connecting to WiFi...");
     delay(1000);
     if (WiFi.status() == WL_NO_SSID_AVAIL)
@@ -31,6 +33,12 @@ void WifiSetup::Connect()
       Serial.println("\nIdle status.");
       return;
     }
+  }
+
+  if (tries == 0)
+  {
+    Serial.println("No se pudo conectar a la red Wi-Fi.");
+    return;
   }
 
   Serial.println("Connected to WiFi!");

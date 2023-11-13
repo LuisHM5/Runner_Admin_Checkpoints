@@ -53,7 +53,7 @@
 ServerHTTP *serverhttp;
 
 // Cards manager
-CardsManager *cardsManager = new CardsManager();
+CardsManager cardsManager;
 
 // SPI bus instances
 SPIClass *vspi = new SPIClass(VSPI);
@@ -133,6 +133,8 @@ void setup()
 
 void loop()
 {
+  string newUID;
+
   if (WiFi.status() != WL_CONNECTED)
   {
     Serial.println("Disconnected from WiFi");
@@ -153,18 +155,29 @@ void loop()
 
   if (radio.available())
   {
-    string newMessage;
-    radio.read(&newMessage, sizeof(newMessage));
-    cout << newMessage << endl;
-    string UID_Tag(newMessage); // Tamaño suficiente para los datos que se esperan recibir
+    // string UID_Tag;
+    string message;
 
+    radio.read(&message, sizeof(message));
+    cout << "Message:" << message.length() << endl;
+    string UID_Tag(message);
+    cout << "UID_Tag:" << UID_Tag.length() << endl;
     if (UID_Tag.length() > 0)
     {
+      newUID.assign(message);
       Serial.print("Datos recibidos:");
       cout << UID_Tag << endl;
-      string Time = TimeClock::GetTime();
-      cardsManager->AddCard(UID_Tag, Time);
     }
+    else
+    {
+      cout << "No se recibieron datos" << endl;
+    }
+  }
+
+  if (newUID.length() > 0)
+  {
+    cardsManager.AddCard(newUID, TimeClock::GetTime());
+    cardsManager.PrintAllCards();
   }
 
   // Check if the lector is connected
@@ -195,5 +208,6 @@ void loop()
 
   // Transform the UID to string and save it
   string UID_Tag = uidToString(newUid.uidByte, newUid.size);
-  cardsManager->AddCard(UID_Tag, Time);
+  cardsManager.AddCard(UID_Tag, Time);
+  cardsManager.PrintAllCards();
 }

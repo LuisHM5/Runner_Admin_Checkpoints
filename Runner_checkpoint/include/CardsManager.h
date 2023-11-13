@@ -12,15 +12,15 @@ public:
   static std::unordered_map<std::string, std::string> UID_Database_local;
   static std::unordered_map<std::string, std::string> Cards_Readed;
 
-  bool AddCard(std::string uid, std::string time)
+  bool AddCard(const std::string &uid, const std::string &time)
   {
-    if (findCardInLocal(uid) == false)
+    if (!findCardInLocal(uid))
       return false;
 
-    if (Cards_Readed.find(uid) != Cards_Readed.end())
+    if (this->Cards_Readed.find(uid) != this->Cards_Readed.end())
       return false;
 
-    Cards_Readed[uid] = time;
+    this->Cards_Readed[uid] = time;
 
     cout << "Tiempo registrado" << endl
          << uid << ": " << time << endl;
@@ -29,14 +29,15 @@ public:
 
   void PrintAllCards()
   {
-    for (auto &card : Cards_Readed)
+    cout << "====Tarjetas registradas=====" << endl;
+    for (auto &card : this->Cards_Readed)
     {
       std::cout << "UID: " << card.first << " Time: " << card.second << std::endl;
     }
   }
 
 private:
-  bool findCardInLocal(std::string uid)
+  bool findCardInLocal(const std::string &uid)
   {
     if (UID_Database_local.find(uid) != UID_Database_local.end())
       return true;
@@ -44,7 +45,7 @@ private:
     return false;
   }
 };
-
+std::unordered_map<std::string, std::string> CardsManager::Cards_Readed;
 std::unordered_map<std::string, std::string> CardsManager::UID_Database_local = {
     {"73A8EAFC", "Tarjeta 1"},
     {"538C1BF5", "Tarjeta 2"},
