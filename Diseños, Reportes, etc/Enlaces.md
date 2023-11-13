@@ -27,3 +27,5 @@
 ### [Web server](https://randomnerdtutorials.com/esp32-async-web-server-espasyncwebserver-library/)
 
 ### [Wifi manager](https://randomnerdtutorials.com/esp32-wi-fi-manager-asyncwebserver/)
+
+### [Web sockets](https://randomnerdtutorials.com/esp8266-nodemcu-websocket-server-sensor/)
