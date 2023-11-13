@@ -11,22 +11,36 @@ END;
 
 SELECT dbo.GetDateTimeInTimeZone() AS CurrentDateTimeInSpecifiedTimeZone;
 
-
 CREATE TABLE TarjetasRFID (
-    ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    UID VARCHAR(8) NOT NULL,
+    UID_Tarjeta VARCHAR(8) PRIMARY KEY NOT NULL,
     NombreTarjeta VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE RegistrosEventos (
     ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    ID_Tarjeta INT,
+    UID_Tarjeta VARCHAR(8) NOT NULL,
     FechaHora DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Evento VARCHAR(50),
-    FOREIGN KEY (ID_Tarjeta) REFERENCES TarjetasRFID(ID)
+    FinalCarrera TIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UID_Tarjeta) REFERENCES TarjetasRFID(UID_Tarjeta)
+);
+select * from Corredores
+CREATE TABLE Corredores(
+    ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    Nombre VARCHAR(100) NOT NULL,
+    Edad INT NOT NULL
 );
 
-INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('73A8EAFC', 'Tarjeta 1')
-INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('538C1BF5', 'Tarjeta 2')
-INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('B3530712', 'Tarjeta 3')
-INSERT INTO TarjetasRFID(UID, NombreTarjeta) VALUES('9368850D', 'Tarjeta 4')
+CREATE TABLE RegistrosCarrera(
+    ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    ID_Corredor INT NOT NULL,
+    UID_Tarjeta VARCHAR(8) NOT NULL ,
+    FOREIGN KEY (ID_Corredor) REFERENCES Corredores(ID),
+    FOREIGN KEY (UID_Tarjeta) REFERENCES TarjetasRFID(UID_Tarjeta)
+);
+
+select * from TarjetasRFID
+INSERT INTO TarjetasRFID (UID_Tarjeta, NombreTarjeta) VALUES
+('73A8EAFC', 'Tarjeta 1'),
+('538C1BF5', 'Tarjeta 2'),
+('B3530712', 'Tarjeta 3'),
+('9368850D', 'Tarjeta 4');
