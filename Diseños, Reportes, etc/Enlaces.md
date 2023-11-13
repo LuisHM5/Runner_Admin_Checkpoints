@@ -28,4 +28,4 @@
 
 ### [Wifi manager](https://randomnerdtutorials.com/esp32-wi-fi-manager-asyncwebserver/)
 
-### [Web sockets](https://randomnerdtutorials.com/esp8266-nodemcu-websocket-server-sensor/)
+### [Web sockets](https://randomnerdtutorials.com/esp32-websocket-server-sensor/)
