@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Runner_Admin_Checkpoints.props" />
+</Project>
