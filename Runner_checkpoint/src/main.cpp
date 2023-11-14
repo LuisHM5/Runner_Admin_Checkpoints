@@ -130,9 +130,22 @@ void setup()
   Serial.println();
   TimeClock::Init();
 }
+unsigned long lastTime = 0;
+unsigned long timerDelay = 1000;
 
 void loop()
 {
+  if ((millis() - lastTime) > timerDelay)
+  {
+    String timeReaded = TimeClock::GetTime().c_str();
+    Serial.println(timeReaded);
+    ServerHTTP::notifyClients(timeReaded);
+
+    lastTime = millis();
+  }
+
+  ServerHTTP::ws.cleanupClients();
+
   string newUID;
 
   if (WiFi.status() != WL_CONNECTED)

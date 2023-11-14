@@ -13,27 +13,32 @@
   <div class="topnav">
     <h1>Runner Manager</h1>
   </div>
-
-  <div class="main">
-    <div class="button-container">
-      <!-- %ifInRace%
-      <h2>En carrera</h2>
-      %endifInRace% -->
-
-      <!-- %ifNotInRace% -->
+  <div class="main content">
+    <div class="card-grid">
       <form action="/start-race" method="post">
         <button type="submit" class="main-btn">
           Iniciar Carrera
         </button>
       </form>
-      <!-- %endifNotInRace% -->
-      <div>
-        <a href="/formulario.html" class="main-btn red-btn">
-          Conectarse a la red
-        </a>
+      <div class="card">
+        <p class="card-title"> Tiempo</p>
+        <p class="reading"><span id="time"></span></p>
       </div>
+
     </div>
   </div>
+
+  <div class="button-container">
+
+
+
+    <div>
+      <a href="/formulario.html" class="main-btn red-btn">
+        Conectarse a la red
+      </a>
+    </div>
+  </div>
+
 </body>
 
 </html>

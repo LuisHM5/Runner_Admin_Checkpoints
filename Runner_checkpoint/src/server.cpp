@@ -1,66 +1,78 @@
 #include "Server.hpp"
 
 AsyncWebServer ServerHTTP::server(ConfigServer::port);
+AsyncWebSocket ServerHTTP::ws("/ws");
+DynamicJsonDocument doc_time(24);
+// DynamicJsonDocument doc_time(24);
 
 ServerHTTP::ServerHTTP()
 {
   ServerHTTP::init();
 }
 
-// Se deja para en caso de que no quedemos sin memoria flash
-/* const char webPage[] PROGMEM = R"rawliteral(
-  <!doctype html>
-  <html lang=en>
-  <head>
-  <meta charset=utf-8>
-  <meta name=viewport content="width=device-width,initial-scale=1">
+void ServerHTTP::notifyClients(String info)
+{
+  ServerHTTP::ws.textAll(info);
+}
 
-  </head>
-  <body>
-  <h2>Wemos Server</h2>
-)rawliteral"; */
+String getDataTime()
+{
+  doc_time["time"] = TimeClock::GetTime();
+  return doc_time.as<String>();
+}
+
+void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
+{
+  AwsFrameInfo *info = (AwsFrameInfo *)arg;
+  if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT)
+  {
+    data[len] = 0;
+    String message = (char *)data;
+    // Check if the message is "getReadings"
+    if (strcmp((char *)data, "getReadings") == 0)
+    {
+      // if it is, send current sensor readings
+      String message = getDataTime();
+      // Serial.print(message);
+      ServerHTTP::notifyClients(message);
+    }
+  }
+}
+
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
+{
+  switch (type)
+  {
+  case WS_EVT_CONNECT:
+    Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+    break;
+  case WS_EVT_DISCONNECT:
+    Serial.printf("WebSocket client #%u disconnected\n", client->id());
+    break;
+  case WS_EVT_DATA:
+    handleWebSocketMessage(arg, data, len);
+    break;
+  case WS_EVT_PONG:
+  case WS_EVT_ERROR:
+    break;
+  }
+}
+
+void ServerHTTP::initWebSocket()
+{
+  ws.onEvent(onEvent);
+  server.addHandler(&ws);
+}
 
 void ServerHTTP::init()
 {
+  ServerHTTP::initWebSocket();
+
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
             {
     if (SPIFFS.exists("/index.html")) {
-          // Leer el contenido del archivo index.html
-        string content = FileUtility::readFile("/index.html");
-
-        // Evaluar condiciones y ajustar el contenido
-        bool inRace = TimeClock::GetStatus();
-        if (inRace) {
-            size_t start_pos = content.find("%ifInRace%");
-            size_t end_pos = content.find("%endifInRace%", start_pos);
-            if (start_pos != std::string::npos && end_pos != std::string::npos) {
-                content.erase(start_pos, end_pos - start_pos + std::strlen("%endifInRace%"));
-            }
-
-            start_pos = content.find("%ifNotInRace%");
-            end_pos = content.find("%endifNotInRace%", start_pos);
-            if (start_pos != std::string::npos && end_pos != std::string::npos) {
-                content.erase(start_pos, end_pos - start_pos + std::strlen("%endifNotInRace%"));
-            }
-        } else {
-            size_t start_pos = content.find("%ifInRace%");
-            size_t end_pos = content.find("%endifInRace%", start_pos);
-            if (start_pos != std::string::npos && end_pos != std::string::npos) {
-                content.erase(start_pos, end_pos - start_pos + std::strlen("%endifInRace%"));
-            }
-
-            start_pos = content.find("%ifNotInRace%");
-            end_pos = content.find("%endifNotInRace%", start_pos);
-            if (start_pos != std::string::npos && end_pos != std::string::npos) {
-                content.erase(start_pos, end_pos - start_pos + std::strlen("%endifNotInRace%"));
-            }
-        }
-
-        // Enviar la página con las condiciones evaluadas al cliente
-        request->send(200, "text/html", content.c_str());
-
-        // request->send(SPIFFS, "/index.html", "text/html");
-    } else {
+      request->send(SPIFFS, "/index.html", "text/html");
+      } else {
         request->send(404, "text/plain", "Archivo no encontrado");
     } });
 
@@ -84,8 +96,22 @@ void ServerHTTP::init()
               request->redirect("/"); });
 
   server.onNotFound([](AsyncWebServerRequest *request)
-                    { request->send(400, "text/plain", "Not found"); });
+                    { request->send(404, "text/plain", "Not found"); });
+
   server.begin();
   Serial.println("HTTP Server is listening on port: ");
   Serial.println(ConfigServer::port);
 }
+
+// Se deja para en caso de que no quedemos sin memoria flash
+/* const char webPage[] PROGMEM = R"rawliteral(
+  <!doctype html>
+  <html lang=en>
+  <head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+
+  </head>
+  <body>
+  <h2>Wemos Server</h2>
+)rawliteral"; */
