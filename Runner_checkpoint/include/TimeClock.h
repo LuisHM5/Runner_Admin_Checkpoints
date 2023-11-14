@@ -38,13 +38,21 @@ public:
     // Obtén la hora actual del RTC interno.
     now = rtc.now();
 
-    std::ostringstream oss;
-    oss << std::setw(2) << std::setfill('0') << now.hour() << ":"
-        << std::setw(2) << std::setfill('0') << now.minute() << ":"
-        << std::setw(2) << std::setfill('0') << now.second();
-    return oss.str();
+    // Concatena las cadenas.
+    return std::to_string(now.hour()) + ":" + std::to_string(now.minute()) + ":" + std::to_string(now.second());
   }
 
+  // static std::string GetTime()
+  // {
+  //   // Obtén la hora actual del RTC interno.
+  //   now = rtc.now();
+
+  //   std::ostringstream oss;
+  //   oss << std::setw(2) << std::setfill('0') << now.hour() << ":"
+  //       << std::setw(2) << std::setfill('0') << now.minute() << ":"
+  //       << std::setw(2) << std::setfill('0') << now.second();
+  //   return oss.str();
+  // }
   static bool GetStatus()
   {
     return isInRace;
