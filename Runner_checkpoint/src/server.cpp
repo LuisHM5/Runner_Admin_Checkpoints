@@ -2,8 +2,6 @@
 
 AsyncWebServer ServerHTTP::server(ConfigServer::port);
 AsyncWebSocket ServerHTTP::ws("/ws");
-DynamicJsonDocument doc_time(24);
-// DynamicJsonDocument doc_time(24);
 
 ServerHTTP::ServerHTTP()
 {
@@ -15,28 +13,21 @@ void ServerHTTP::notifyClients(String info)
   ServerHTTP::ws.textAll(info);
 }
 
-String getDataTime()
-{
-  doc_time["time"] = TimeClock::GetTime();
-  return doc_time.as<String>();
-}
-
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
 {
-  AwsFrameInfo *info = (AwsFrameInfo *)arg;
-  if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT)
-  {
-    data[len] = 0;
-    String message = (char *)data;
-    // Check if the message is "getReadings"
-    if (strcmp((char *)data, "getReadings") == 0)
-    {
-      // if it is, send current sensor readings
-      String message = getDataTime();
-      // Serial.print(message);
-      ServerHTTP::notifyClients(message);
-    }
-  }
+  // AwsFrameInfo *info = (AwsFrameInfo *)arg;
+  // if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT)
+  // {
+  //   data[len] = 0;
+  //   String message = (char *)data;
+  //   // Check if the message is "getReadings"
+  //   if (strcmp((char *)data, "getReadings") == 0)
+  //   {
+  //     // if it is, send current sensor readings
+  //     String message = TimeClock::getDataTimeJson();
+  //     ServerHTTP::notifyClients(message);
+  //   }
+  // }
 }
 
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
@@ -87,13 +78,33 @@ void ServerHTTP::init()
             { request->send(SPIFFS, "/style.css", "text/css"); });
 
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/script.js", "application/javascript"); });
+            {
+              request->send(SPIFFS, "/script.js", "application/javascript");
+              if(TimeClock::GetStatus()) {
+                ServerHTTP::notifyClients(TimeClock::getDataTimeJson());
+                Serial.println("Enviando estado de carrera...");
+              } });
 
   server.on("/start-race", HTTP_POST, [](AsyncWebServerRequest *request)
             {
-              Serial.println("Iniciando carrera...");
-              TimeClock::Start();
+              if (!TimeClock::GetStatus())
+              {
+                Serial.println("Iniciando carrera...");
+                TimeClock::Start();
+                request->send(200, "text/plain", "ok");
+              }
+              // request->redirect("/");
+            });
+  server.on("/stop-race", HTTP_POST, [](AsyncWebServerRequest *request)
+            {
+              if(!TimeClock::GetStatus()) {
+                Serial.println("Deteniendo carrera...");
+                TimeClock::SetStatus(false);
+                TimeClock::Stop();
+              }
               request->redirect("/"); });
+  server.on("/status-race", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(200, "text/plain", TimeClock::GetStatus() ? "true" : "false"); });
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "text/plain", "Not found"); });

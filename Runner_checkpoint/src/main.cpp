@@ -128,26 +128,12 @@ void setup()
   else
     Serial.println(F("DEFECT or UNKNOWN"));
   Serial.println();
-  TimeClock::Init();
 }
 unsigned long lastTime = 0;
 unsigned long timerDelay = 1000;
 
 void loop()
 {
-  if ((millis() - lastTime) > timerDelay)
-  {
-    String timeReaded = TimeClock::GetTime().c_str();
-    Serial.println(timeReaded);
-    ServerHTTP::notifyClients(timeReaded);
-
-    lastTime = millis();
-  }
-
-  ServerHTTP::ws.cleanupClients();
-
-  string newUID;
-
   if (WiFi.status() != WL_CONNECTED)
   {
     Serial.println("Disconnected from WiFi");
@@ -160,6 +146,24 @@ void loop()
     Serial.print(WiFi.localIP());
     Serial.println((String) ":" + ConfigServer::port);
   }
+
+  // Wait until race starts
+  while (!TimeClock::GetStatus())
+  {
+    delay(1);
+  }
+
+  // Send the time to the clients
+  if ((millis() - lastTime) > timerDelay)
+  {
+    // ServerHTTP::notifyClients(TimeClock::getDataTimeJson());
+
+    lastTime = millis();
+  }
+
+  ServerHTTP::ws.cleanupClients();
+
+  string newUID;
 
   if (!radio.isChipConnected())
   {

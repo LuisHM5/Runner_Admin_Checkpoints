@@ -13,18 +13,22 @@
   <div class="topnav">
     <h1>Runner Manager</h1>
   </div>
-  <div class="main content">
-    <div class="card-grid">
-      <form action="/start-race" method="post">
-        <button type="submit" class="main-btn">
-          Iniciar Carrera
-        </button>
-      </form>
-      <div class="card">
-        <p class="card-title"> Tiempo</p>
-        <p class="reading"><span id="time"></span></p>
-      </div>
+  <div class="main">
+    <div id="container-race" class="container-btn">
 
+      <button type="button" class="main-btn" onclick="handleInitRace(event)">
+        Iniciar Carrera
+      </button>
+
+    </div>
+    <div id="container-time" class="container-time hidden">
+      <div class="card-grid">
+        <div class="card card-time">
+          <p class="card-title"> Tiempo</p>
+          <p class="time time"><span id="time">00:00:00</span></p>
+          <!-- <p class="reading"><span id="time"></span></p> -->
+        </div>
+      </div>
     </div>
   </div>
 
