@@ -44,9 +44,10 @@ function onMessage(event) {
 
   if (myObj.hasOwnProperty("time")) {
     // add time to span
-    const { time } = myObj;
-    if (timecounter) clearInterval(timecounter);
-    setTimeRace({ time });
+    if (!inRace) {
+      const { time } = myObj;
+      setTimeRace({ time });
+    }
   }
 
   console.log("has property?:", myObj.hasOwnProperty("status"));
@@ -70,6 +71,7 @@ function setDefaultState() {
   } catch (error) {
     console.log(error);
   }
+  inRace = false;
 }
 
 function setTimeRace({ time }) {
@@ -81,6 +83,8 @@ function setTimeRace({ time }) {
 
 // set time out 1s
 const timeCount = () => {
+  console.log("invoke timecounter | status:", inRace);
+  if (inRace) return;
   timecounter = setInterval(() => {
     console.log("timecount");
     // Add 1 to time in format with ceros 00:00:00
@@ -101,6 +105,8 @@ const timeCount = () => {
     }
     timeSpan.innerHTML = newTime;
   }, 1000);
+
+  inRace = true;
 };
 
 // RACE
@@ -130,6 +136,7 @@ const handleStopRace = (event) => {
   // confirm async
 
   if (confirm("¿Está seguro de detener la carrera?")) {
+    clearInterval(timecounter);
     fetch(url, {
       method,
     })
