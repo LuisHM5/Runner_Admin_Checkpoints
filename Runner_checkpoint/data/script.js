@@ -45,11 +45,38 @@ function onMessage(event) {
   if (myObj.hasOwnProperty("time")) {
     // add time to span
     const { time } = myObj;
-    timeSpan.innerHTML = time;
-    containerBtnStartRace.classList.add("hidden");
-    containerTime.classList.remove("hidden");
-    timeCount();
+    if (timecounter) clearInterval(timecounter);
+    setTimeRace({ time });
   }
+
+  console.log("has property?:", myObj.hasOwnProperty("status"));
+  if (myObj.hasOwnProperty("status")) {
+    // add time to span
+    const { status } = myObj;
+    console.log("status value:", status);
+    if (!status) {
+      console.log("Entro a status false");
+      setDefaultState();
+    }
+  }
+}
+
+function setDefaultState() {
+  containerTime.classList.add("hidden");
+  containerBtnStartRace.classList.remove("hidden");
+  try {
+    console.log("clear interval");
+    clearInterval(timecounter);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function setTimeRace({ time }) {
+  timeSpan.innerHTML = time;
+  containerBtnStartRace.classList.add("hidden");
+  containerTime.classList.remove("hidden");
+  timeCount();
 }
 
 // set time out 1s
@@ -72,6 +99,7 @@ const timeCount = () => {
     } else {
       newTime = `${hours + 1 < 10 ? "0" + (hours + 1) : hours + 1}:00:00`;
     }
+    timeSpan.innerHTML = newTime;
   }, 1000);
 };
 
@@ -86,18 +114,37 @@ const handleInitRace = (event) => {
   fetch(url, {
     method,
   })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      if (data == "ok") {
-        containerBtnStartRace.classList.add("hidden");
-        containerTime.classList.remove("hidden");
+      const { time } = data;
+      if (time) {
+        setTimeRace({ time });
       }
-      timeCount();
     })
     .catch((error) => console.log(error));
 };
 
+const handleStopRace = (event) => {
+  const url = "/stop-race";
+  const method = "POST";
+  // confirm async
+
+  if (confirm("¿Está seguro de detener la carrera?")) {
+    fetch(url, {
+      method,
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        if (data == "ok") {
+          setDefaultState();
+        } else {
+          alert("No se pudo detener la carrera");
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+};
 function GetRaceStatus() {
   const url = "/status-race";
   const method = "GET";
@@ -105,13 +152,12 @@ function GetRaceStatus() {
   fetch(url, {
     method,
   })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      if (data == "true") {
-        containerBtnStartRace.classList.add("hidden");
-        containerTime.classList.remove("hidden");
-        timeCount();
+      const { time } = data;
+
+      if (time) {
+        setTimeRace({ time });
       }
     })
     .catch((error) => console.log(error));

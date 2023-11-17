@@ -91,20 +91,32 @@ void ServerHTTP::init()
               {
                 Serial.println("Iniciando carrera...");
                 TimeClock::Start();
-                request->send(200, "text/plain", "ok");
+                ServerHTTP::notifyClients(TimeClock::getDataTimeJson());
+                request->send(200, "application/json", TimeClock::getDataTimeJson());
               }
               // request->redirect("/");
             });
   server.on("/stop-race", HTTP_POST, [](AsyncWebServerRequest *request)
             {
-              if(!TimeClock::GetStatus()) {
+              if (TimeClock::GetStatus())
+              {
                 Serial.println("Deteniendo carrera...");
                 TimeClock::SetStatus(false);
                 TimeClock::Stop();
+                ServerHTTP::notifyClients("{\"status\":false}");
+                return request->send(200, "text/plain", "ok");
               }
-              request->redirect("/"); });
+              request->send(500, "text/plain", "error"); });
   server.on("/status-race", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(200, "text/plain", TimeClock::GetStatus() ? "true" : "false"); });
+            {
+              if (TimeClock::GetStatus())
+              {
+                request->send(200, "application/json", TimeClock::getDataTimeJson());
+              }
+              else
+              {
+                request->send(200, "application/json", "{\"status\":false}");
+              } });
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "text/plain", "Not found"); });

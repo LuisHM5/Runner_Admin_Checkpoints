@@ -156,7 +156,7 @@ void loop()
   // Send the time to the clients
   if ((millis() - lastTime) > timerDelay)
   {
-    // ServerHTTP::notifyClients(TimeClock::getDataTimeJson());
+    // ServerHTTP::notifyClients(TimeClock::getDataTimeJson());||
 
     lastTime = millis();
   }
