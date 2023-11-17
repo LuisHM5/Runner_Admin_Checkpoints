@@ -163,7 +163,7 @@ void loop()
 
   ServerHTTP::ws.cleanupClients();
 
-  string newUID;
+  string newUIDRadio;
 
   if (!radio.isChipConnected())
   {
@@ -179,7 +179,7 @@ void loop()
 
     if (UID_Tag.length() > 0)
     {
-      newUID.assign(message);
+      newUIDRadio.assign(message);
       Serial.print("Datos recibidos:");
       cout << UID_Tag << endl;
     }
@@ -189,9 +189,9 @@ void loop()
     }
   }
 
-  if (newUID.length() > 0)
+  if (newUIDRadio.length() > 0)
   {
-    cardsManager.AddCard(newUID, TimeClock::GetTime());
+    cardsManager.AddCard(newUIDRadio, TimeClock::GetTime(), "#2");
     cardsManager.PrintAllCards();
   }
 
@@ -223,6 +223,6 @@ void loop()
 
   // Transform the UID to string and save it
   string UID_Tag = uidToString(newUid.uidByte, newUid.size);
-  cardsManager.AddCard(UID_Tag, Time);
+  cardsManager.AddCard(UID_Tag, Time, "#1");
   cardsManager.PrintAllCards();
 }
