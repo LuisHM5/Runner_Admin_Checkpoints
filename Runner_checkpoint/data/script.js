@@ -1,4 +1,5 @@
 GetRaceStatus();
+GetDataRace();
 const gateway = `ws://${window.location.hostname}:${window.location.port}/ws`;
 let websocket;
 let timecounter;
@@ -19,16 +20,16 @@ function getReadings() {
 function initWebSocket() {
   console.log("Trying to open a WebSocket connection…");
   websocket = new WebSocket(gateway);
-  websocket.onopen = onOpen;
+  // websocket.onopen = onOpen;
   websocket.onclose = onClose;
   websocket.onmessage = onMessage;
 }
 
 // When websocket is established, call the getReadings() function
-function onOpen(event) {
-  console.log("Connection opened");
-  getReadings();
-}
+// function onOpen(event) {
+//   console.log("Connection opened");
+//   getReadings();
+// }
 
 function onClose(event) {
   console.log("Connection closed");
@@ -50,53 +51,8 @@ function onMessage(event) {
   }
 
   if (msgObj.hasOwnProperty("cards")) {
-    /*
-    MODEL
-     "cards": {
-    "73A8EAFC": { "punto1": "10:00:00", "punto2": "10:20:00" },
-    "538C1BF5": { "punto1": "10:00:00", "punto2": "10:20:00" }
-  }
-    */
     const { cards } = msgObj;
-    console.log("cards value:", cards);
-    const cardsKeys = Object.keys(cards);
-    console.log("cards keys:", cardsKeys);
-    const table = document.querySelector(".table-body");
-    table.innerHTML = "";
-    cardsKeys.forEach((card) => {
-      // Iterate over each point
-      const points = cards[card];
-      const pointsKeys = Object.keys(points);
-      console.log("points keys:", pointsKeys);
-      pointsKeys.forEach((point) => {
-        // order by time and point
-        /*
-            <table id="table" class="table">
-      <thead class="table-head">
-        <tr>
-          <th>Tarjeta</th>
-          <th>Punto</th>
-          <th>Tiempo</th>
-        </tr>
-      </thead>
-      <tbody class="table-body">
-      </tbody>
-    </table>
-        */
-        const time = points[point];
-        const tr = document.createElement("tr");
-        const tdCard = document.createElement("td");
-        tdCard.innerHTML = card;
-        const tdPoint = document.createElement("td");
-        tdPoint.innerHTML = point;
-        const tdTime = document.createElement("td");
-        tdTime.innerHTML = time;
-        tr.appendChild(tdCard);
-        tr.appendChild(tdPoint);
-        tr.appendChild(tdTime);
-        table.appendChild(tr);
-      });
-    });
+    setDataTable({ cards });
   }
 
   if (msgObj.hasOwnProperty("status")) {
@@ -109,9 +65,49 @@ function onMessage(event) {
   }
 }
 
+function setDataTable({ cards }) {
+  const table = document.querySelector(".table-body");
+  table.innerHTML = "";
+
+  const cardsEntries = Object.entries(cards);
+
+  const cardsEntriesOrdered = cardsEntries.sort((a, b) => {
+    const pointsA = a[1];
+    const pointsB = b[1];
+    const pointsKeysA = Object.keys(pointsA);
+    const pointsKeysB = Object.keys(pointsB);
+    const lastTimeA = pointsA[pointsKeysA[pointsKeysA.length - 1]];
+    const lastTimeB = pointsB[pointsKeysB[pointsKeysB.length - 1]];
+
+    // Assuming time is in HH:mm:ss format
+    const timeComparison = new Date(`1970-01-01T${lastTimeA}`) - new Date(`1970-01-01T${lastTimeB}`);
+
+    return timeComparison;
+  });
+
+  cardsEntriesOrdered.forEach(([card, points]) => {
+    // Iterate over each point
+    const pointsKeys = Object.keys(points);
+    pointsKeys.forEach((point) => {
+      const row = document.createElement("tr");
+      const cardTd = document.createElement("td");
+      const pointTd = document.createElement("td");
+      const timeTd = document.createElement("td");
+      cardTd.innerHTML = card;
+      pointTd.innerHTML = point;
+      timeTd.innerHTML = points[point];
+      row.appendChild(cardTd);
+      row.appendChild(pointTd);
+      row.appendChild(timeTd);
+      table.appendChild(row);
+    });
+  });
+}
+
 function setDefaultState() {
   containerTime.classList.add("hidden");
   containerBtnStartRace.classList.remove("hidden");
+
   try {
     console.log("clear interval");
     clearInterval(timecounter);
@@ -119,6 +115,49 @@ function setDefaultState() {
     console.log(error);
   }
   inRace = false;
+}
+
+function setDataTable({ cards }) {
+  const cardsKeys = Object.keys(cards);
+  const table = document.querySelector(".table-body");
+  table.innerHTML = "";
+
+  const cardsKeysOrdered = cardsKeys.sort((a, b) => {
+    const pointsA = cards[a];
+    const pointsB = cards[b];
+    const pointsKeysA = Object.keys(pointsA);
+    const pointsKeysB = Object.keys(pointsB);
+    const lastTimeA = pointsA[pointsKeysA[pointsKeysA.length - 1]];
+    const lastTimeB = pointsB[pointsKeysB[pointsKeysB.length - 1]];
+    if (lastTimeA > lastTimeB) {
+      return -1;
+    }
+    if (lastTimeA < lastTimeB) {
+      return 1;
+    }
+    // a must be equal to b
+    return 0;
+  });
+
+  cardsKeysOrdered.forEach((card) => {
+    // Iterate over each point
+    const points = cards[card];
+    const pointsKeys = Object.keys(points);
+    console.log("points keys:", pointsKeys);
+    pointsKeys.forEach((point) => {
+      const row = document.createElement("tr");
+      const cardTd = document.createElement("td");
+      const pointTd = document.createElement("td");
+      const timeTd = document.createElement("td");
+      cardTd.innerHTML = card;
+      pointTd.innerHTML = point;
+      timeTd.innerHTML = points[point];
+      row.appendChild(cardTd);
+      row.appendChild(pointTd);
+      row.appendChild(timeTd);
+      table.appendChild(row);
+    });
+  });
 }
 
 function setTimeRace({ time }) {
@@ -158,7 +197,8 @@ const timeCount = () => {
 
 // RACE
 
-const handleInitRace = (event) => {
+function handleInitRace(event) {
+  console.log("INIT RACE");
   event.preventDefault();
   // Send post
   const url = "/start-race";
@@ -172,10 +212,12 @@ const handleInitRace = (event) => {
       const { time } = data;
       if (time) {
         setTimeRace({ time });
+        const table = document.querySelector(".table-body");
+        table.innerHTML = "";
       }
     })
     .catch((error) => console.log(error));
-};
+}
 
 const handleStopRace = (event) => {
   const url = "/stop-race";
@@ -199,6 +241,7 @@ const handleStopRace = (event) => {
       .catch((error) => console.log(error));
   }
 };
+
 function GetRaceStatus() {
   const url = "/status-race";
   const method = "GET";
@@ -212,6 +255,24 @@ function GetRaceStatus() {
 
       if (time) {
         setTimeRace({ time });
+      }
+    })
+    .catch((error) => console.log(error));
+}
+
+function GetDataRace() {
+  const url = "/data-race";
+  const method = "GET";
+
+  fetch(url, {
+    method,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const { cards } = data;
+
+      if (time) {
+        setDataTable({ cards });
       }
     })
     .catch((error) => console.log(error));

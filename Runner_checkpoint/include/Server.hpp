@@ -8,6 +8,7 @@
 #include "config.h"
 #include "TimeClock.h"
 #include "FileUtility.hpp"
+#include "CardsManager.h"
 class ServerHTTP
 {
 private:

@@ -78,12 +78,7 @@ void ServerHTTP::init()
             { request->send(SPIFFS, "/style.css", "text/css"); });
 
   server.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
-              request->send(SPIFFS, "/script.js", "application/javascript");
-              if(TimeClock::GetStatus()) {
-                ServerHTTP::notifyClients(TimeClock::getDataTimeJson());
-                Serial.println("Enviando estado de carrera...");
-              } });
+            { request->send(SPIFFS, "/script.js", "application/javascript"); });
 
   server.on("/start-race", HTTP_POST, [](AsyncWebServerRequest *request)
             {
@@ -94,15 +89,24 @@ void ServerHTTP::init()
                 ServerHTTP::notifyClients(TimeClock::getDataTimeJson());
                 request->send(200, "application/json", TimeClock::getDataTimeJson());
               }
-              // request->redirect("/");
-            });
+              return request->send(500); });
+  server.on("/data-race", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+              if (TimeClock::GetStatus())
+              {
+                CardsManager cardsManager;
+                ServerHTTP::notifyClients(cardsManager.GetAllCardsJson());
+                request->send(200, "application/json", cardsManager.GetAllCardsJson());
+              }
+              return request->send(500); });
   server.on("/stop-race", HTTP_POST, [](AsyncWebServerRequest *request)
             {
               if (TimeClock::GetStatus())
               {
                 Serial.println("Deteniendo carrera...");
-                TimeClock::SetStatus(false);
                 TimeClock::Stop();
+                CardsManager cardsManager;
+                cardsManager.ClearAllCards();
                 ServerHTTP::notifyClients("{\"status\":false}");
                 return request->send(200, "text/plain", "ok");
               }
@@ -111,11 +115,11 @@ void ServerHTTP::init()
             {
               if (TimeClock::GetStatus())
               {
-                request->send(200, "application/json", TimeClock::getDataTimeJson());
+                return request->send(200, "application/json", TimeClock::getDataTimeJson());
               }
               else
               {
-                request->send(200, "application/json", "{\"status\":false}");
+                return request->send(200, "application/json", "{\"status\":false}");
               } });
 
   server.onNotFound([](AsyncWebServerRequest *request)
