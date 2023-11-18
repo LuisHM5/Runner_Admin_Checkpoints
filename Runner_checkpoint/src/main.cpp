@@ -193,6 +193,7 @@ void loop()
   {
     cardsManager.AddCard(newUIDRadio, TimeClock::GetTime(), "#2");
     cardsManager.PrintAllCards();
+    ServerHTTP::notifyClients(cardsManager.GetAllCardsJson());
   }
 
   // Check if the lector is connected
@@ -225,4 +226,5 @@ void loop()
   string UID_Tag = uidToString(newUid.uidByte, newUid.size);
   cardsManager.AddCard(UID_Tag, Time, "#1");
   cardsManager.PrintAllCards();
+  ServerHTTP::notifyClients(cardsManager.GetAllCardsJson());
 }

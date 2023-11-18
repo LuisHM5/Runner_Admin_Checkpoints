@@ -212,3 +212,72 @@ button {
 .hidden {
   display: none;
 }
+
+/* Tables */
+
+.container-table {
+  width: 100vw;
+  height: auto;
+  min-height: auto;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 90%;
+  max-width: 1000px;
+}
+
+.table th {
+  background-color: #333;
+  color: white;
+}
+
+.table th,
+td {
+  padding: 0.8rem;
+  font-size: 1.4rem;
+}
+
+.table-body {
+  background-color: #eee;
+  color: #444;
+}
+
+/* table media queries */
+@media screen and (max-width: 600px) {
+  .table {
+    width: 90%;
+  }
+  .table-head {
+    display: none;
+  }
+
+  .table td {
+    display: block;
+    text-align: right;
+  }
+  .table th,
+  td {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    text-transform: uppercase;
+    float: left;
+    margin-right: 2rem;
+  }
+  .table-body tr {
+    display: block;
+    border-bottom: 1rem solid white;
+  }
+}
+
+/* Table debtor */
+#table tr td:nth-child(2) {
+  text-align: center;
+}

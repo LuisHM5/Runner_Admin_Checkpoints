@@ -39,21 +39,68 @@ function onClose(event) {
 let inRace = false;
 function onMessage(event) {
   console.log(event.data);
-  var myObj = JSON.parse(event.data);
-  var keys = Object.keys(myObj);
+  var msgObj = JSON.parse(event.data);
+  var keys = Object.keys(msgObj);
 
-  if (myObj.hasOwnProperty("time")) {
-    // add time to span
+  if (msgObj.hasOwnProperty("time")) {
     if (!inRace) {
-      const { time } = myObj;
+      const { time } = msgObj;
       setTimeRace({ time });
     }
   }
 
-  console.log("has property?:", myObj.hasOwnProperty("status"));
-  if (myObj.hasOwnProperty("status")) {
-    // add time to span
-    const { status } = myObj;
+  if (msgObj.hasOwnProperty("cards")) {
+    /*
+    MODEL
+     "cards": {
+    "73A8EAFC": { "punto1": "10:00:00", "punto2": "10:20:00" },
+    "538C1BF5": { "punto1": "10:00:00", "punto2": "10:20:00" }
+  }
+    */
+    const { cards } = msgObj;
+    console.log("cards value:", cards);
+    const cardsKeys = Object.keys(cards);
+    console.log("cards keys:", cardsKeys);
+    const table = document.querySelector(".table-body");
+    table.innerHTML = "";
+    cardsKeys.forEach((card) => {
+      // Iterate over each point
+      const points = cards[card];
+      const pointsKeys = Object.keys(points);
+      console.log("points keys:", pointsKeys);
+      pointsKeys.forEach((point) => {
+        // order by time and point
+        /*
+            <table id="table" class="table">
+      <thead class="table-head">
+        <tr>
+          <th>Tarjeta</th>
+          <th>Punto</th>
+          <th>Tiempo</th>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+      </tbody>
+    </table>
+        */
+        const time = points[point];
+        const tr = document.createElement("tr");
+        const tdCard = document.createElement("td");
+        tdCard.innerHTML = card;
+        const tdPoint = document.createElement("td");
+        tdPoint.innerHTML = point;
+        const tdTime = document.createElement("td");
+        tdTime.innerHTML = time;
+        tr.appendChild(tdCard);
+        tr.appendChild(tdPoint);
+        tr.appendChild(tdTime);
+        table.appendChild(tr);
+      });
+    });
+  }
+
+  if (msgObj.hasOwnProperty("status")) {
+    const { status } = msgObj;
     console.log("status value:", status);
     if (!status) {
       console.log("Entro a status false");

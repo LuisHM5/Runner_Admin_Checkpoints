@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include <iostream>
-
+#include <ArduinoJson.h>
 using namespace std;
 using CheckpointData = std::unordered_map<std::string, std::string>;
 using CardDataMap = std::unordered_map<std::string, CheckpointData>;
@@ -14,7 +14,6 @@ public:
   ~CardsManager(){};
   static std::unordered_map<std::string, std::string> UID_Database_local;
   static CardDataMap Cards_Readed;
-
   bool AddCard(const std::string &uid, const std::string &time, const std::string &punto)
   {
 
@@ -63,6 +62,28 @@ public:
         cout << "Tiempo: " << data.second << endl;
       }
     }
+  }
+
+  String GetAllCardsJson()
+  {
+    DynamicJsonDocument doc(1024);
+    /*
+    MODEL
+     "cards": {
+    "73A8EAFC": { "punto1": "10:00:00", "punto2": "10:20:00" },
+    "538C1BF5": { "punto1": "10:00:00", "punto2": "10:20:00" }
+  }
+    */
+    JsonObject cards = doc.createNestedObject("cards");
+    for (auto &card : Cards_Readed)
+    {
+      JsonObject card_data = cards.createNestedObject(card.first.c_str());
+      for (auto &data : card.second)
+      {
+        card_data[data.first.c_str()] = data.second.c_str();
+      }
+    }
+    return doc.as<String>();
   }
 
 private:
