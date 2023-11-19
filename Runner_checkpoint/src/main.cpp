@@ -12,7 +12,10 @@
 #include "WifiSetup.h"
 #include "Server.hpp"
 #include "config.h"
-
+// Access Point
+#include <WiFi.h>
+#include "AccessPoint.h"
+#include "configAP.h"
 // Flash File System
 #include <SPIFFS.h>
 // Bus SPI
@@ -95,6 +98,7 @@ void setup()
   Serial.print("http://");
   Serial.print(WiFi.localIP());
   Serial.println((String) ":" + ConfigServer::port);
+  SetupAccessPoint::Created();
   // Buzzer setup
   pinMode(BUZZER_PIN, OUTPUT);
 
