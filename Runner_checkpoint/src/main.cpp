@@ -96,8 +96,11 @@ void setup()
   // Radio setup
   radio.begin(vspi);
   radio.openReadingPipe(1, pipeAddress); // Abre un tubo de lectura en el mismo canal que el transmisor
-  radio.startListening();                // Inicia la escucha
-  radio.setPALevel(RF24_PA_MIN);
+  // radio.setPALevel(RF24_PA_MIN);
+  // radio.setDataRate(RF24_1MBPS);
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setDataRate(RF24_250KBPS);
+  radio.startListening(); // Inicia la escucha
 
   // Lector RFID setup
   mfrc522.PCD_Init();
@@ -120,24 +123,16 @@ unsigned long timerDelay = 1000;
 
 void loop()
 {
-  // if (WiFi.status() != WL_CONNECTED)
-  // {
-  //   ConfigManager::begin();
-  // }
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    ConfigManager::begin();
+  }
 
   // Wait until race starts
   while (!TimeClock::GetStatus())
   {
     delay(1);
   }
-
-  // Send the time to the clients
-  // if ((millis() - lastTime) > timerDelay)
-  // {
-  //   // ServerHTTP::notifyClients(TimeClock::getDataTimeJson());||
-
-  //   lastTime = millis();
-  // }
 
   ServerHTTP::ws.cleanupClients();
 

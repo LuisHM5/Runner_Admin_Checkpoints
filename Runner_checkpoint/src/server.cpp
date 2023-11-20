@@ -129,68 +129,14 @@ void ServerHTTP::init()
                 return request->send(200, "application/json", "{\"status\":false}");
               } });
 
-  // server.on("/save-network", HTTP_POST, [](AsyncWebServerRequest *request)
-  //           {
-  //             Serial.println("Guardando configuracion de red...");
-  //             // Get the JSON data from the request
-  //             AsyncWebParameter *postData = request->getParam("plain", false);
-  //             if (postData)
-  //             {
-  //               // Parse the JSON data
-  //               const size_t bufferSize = JSON_OBJECT_SIZE(2) + 30;
-  //               DynamicJsonDocument jsonBuffer(bufferSize);
-
-  //               DeserializationError error = deserializeJson(jsonBuffer, postData->value());
-  //               if (error)
-  //               {
-  //                 Serial.println("Failed to parse JSON");
-  //                 return;
-  //               }
-
-  //                if(jsonBuffer.isNull()){
-  //                 request->send(400, "application/json", "{\"config\":false}");
-  //                 return;
-  //               }
-  //               if(ConfigManager::saveConfig(jsonBuffer.as<String>())){
-  //                 request->send(200, "application/json", "{\"config\":true}");
-  //               }else{
-  //                 request->send(500, "application/json", "{\"config\":false}");
-  //               }
-  //               // Access the parsed JSON data
-  //               String ssid = jsonBuffer["ssid"];
-  //               String pass = jsonBuffer["pass"];
-
-  //               // Do something with the data
-  //               Serial.println("Received network credentials:");
-  //               Serial.println("SSID: " + ssid);
-  //               Serial.println("Password: " + pass);
-
-  //               // Respond to the client
-  //               request->send(200, "text/plain", "Network credentials saved");
-  //             }
-  //             else
-  //             {
-  //               Serial.println("No JSON data received");
-  //               request->send(400, "text/plain", "Bad Request");
-  //             } });
-
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "text/plain", "Not found"); });
-
+  // add favicon
+  server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/favicon.ico", "image/x-icon"); });
+  // static files
+  server.serveStatic("/", SPIFFS, "/");
   server.begin();
   Serial.println("HTTP Server is listening on port: ");
   Serial.println(ConfigServer::port);
 }
-
-// Se deja para en caso de que no quedemos sin memoria flash
-/* const char webPage[] PROGMEM = R"rawliteral(
-  <!doctype html>
-  <html lang=en>
-  <head>
-  <meta charset=utf-8>
-  <meta name=viewport content="width=device-width,initial-scale=1">
-
-  </head>
-  <body>
-  <h2>Wemos Server</h2>
-)rawliteral"; */
