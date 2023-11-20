@@ -9,61 +9,61 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Runner_Admin_Checkpoints
 build_property.RootNamespace = Runner_Admin_Checkpoints
-build_property.ProjectDir = C:\Users\hdzma\OneDrive\Escritorio\9no Semestre\IOT\Runner_Admin_Checkpoints\Runner_Admin_Server_dotnet\Runner_Admin_Checkpoints\Runner_Admin_Checkpoints\
+build_property.ProjectDir = C:\Users\Luis\Desktop\Projects\Runner_Admin_Checkpoints\Runner_Admin_Server_dotnet\Runner_Admin_Checkpoints\Runner_Admin_Checkpoints\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\hdzma\OneDrive\Escritorio\9no Semestre\IOT\Runner_Admin_Checkpoints\Runner_Admin_Server_dotnet\Runner_Admin_Checkpoints\Runner_Admin_Checkpoints
+build_property.MSBuildProjectDirectory = C:\Users\Luis\Desktop\Projects\Runner_Admin_Checkpoints\Runner_Admin_Server_dotnet\Runner_Admin_Checkpoints\Runner_Admin_Checkpoints
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Error.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Formulario.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Formulario.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXVsYXJpby5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Index.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/_ViewImports.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/_ViewStart.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Create.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Delete.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Details.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Edit.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Index.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/hdzma/OneDrive/Escritorio/9no Semestre/IOT/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Shared/_Layout.cshtml]
+[C:/Users/Luis/Desktop/Projects/Runner_Admin_Checkpoints/Runner_Admin_Server_dotnet/Runner_Admin_Checkpoints/Runner_Admin_Checkpoints/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-l40gkzaw87

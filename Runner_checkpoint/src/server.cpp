@@ -13,23 +13,6 @@ void ServerHTTP::notifyClients(String info)
   ServerHTTP::ws.textAll(info);
 }
 
-void handleWebSocketMessage(void *arg, uint8_t *data, size_t len)
-{
-  // AwsFrameInfo *info = (AwsFrameInfo *)arg;
-  // if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT)
-  // {
-  //   data[len] = 0;
-  //   String message = (char *)data;
-  //   // Check if the message is "getReadings"
-  //   if (strcmp((char *)data, "getReadings") == 0)
-  //   {
-  //     // if it is, send current sensor readings
-  //     String message = TimeClock::getDataTimeJson();
-  //     ServerHTTP::notifyClients(message);
-  //   }
-  // }
-}
-
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len)
 {
   switch (type)
@@ -39,9 +22,6 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
     break;
   case WS_EVT_DISCONNECT:
     Serial.printf("WebSocket client #%u disconnected\n", client->id());
-    break;
-  case WS_EVT_DATA:
-    handleWebSocketMessage(arg, data, len);
     break;
   case WS_EVT_PONG:
   case WS_EVT_ERROR:
@@ -55,10 +35,36 @@ void ServerHTTP::initWebSocket()
   server.addHandler(&ws);
 }
 
+AsyncCallbackJsonWebHandler *ServerHTTP::SaveNET = new AsyncCallbackJsonWebHandler(
+    "/save-network", [](AsyncWebServerRequest *request, JsonVariant &json)
+    { 
+      Serial.println("Guardando configuracion de red...");
+      Serial.println(json.as<String>());
+      if(json["ssid"].isNull() || json["pass"].isNull()){
+        request->send(400, "application/json", "{\"config\":false}");
+        return;
+      }
+
+      if(json.isNull()){
+        request->send(400, "application/json", "{\"config\":false}");
+        return;
+      }
+      if(ConfigManager::saveConfig(json.as<String>())){
+        request->send(200, "application/json", "{\"config\":true}");
+      }else{
+        request->send(500, "application/json", "{\"config\":false}");
+      }
+
+                                                                        
+    delay(3000);
+    ESP.restart(); },
+    1024);
+
 void ServerHTTP::init()
 {
-  ServerHTTP::initWebSocket();
 
+  server.addHandler(ServerHTTP::SaveNET);
+  ServerHTTP::initWebSocket();
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
             {
     if (SPIFFS.exists("/index.html")) {
@@ -111,6 +117,7 @@ void ServerHTTP::init()
                 return request->send(200, "text/plain", "ok");
               }
               request->send(500, "text/plain", "error"); });
+
   server.on("/status-race", HTTP_GET, [](AsyncWebServerRequest *request)
             {
               if (TimeClock::GetStatus())
@@ -121,6 +128,51 @@ void ServerHTTP::init()
               {
                 return request->send(200, "application/json", "{\"status\":false}");
               } });
+
+  // server.on("/save-network", HTTP_POST, [](AsyncWebServerRequest *request)
+  //           {
+  //             Serial.println("Guardando configuracion de red...");
+  //             // Get the JSON data from the request
+  //             AsyncWebParameter *postData = request->getParam("plain", false);
+  //             if (postData)
+  //             {
+  //               // Parse the JSON data
+  //               const size_t bufferSize = JSON_OBJECT_SIZE(2) + 30;
+  //               DynamicJsonDocument jsonBuffer(bufferSize);
+
+  //               DeserializationError error = deserializeJson(jsonBuffer, postData->value());
+  //               if (error)
+  //               {
+  //                 Serial.println("Failed to parse JSON");
+  //                 return;
+  //               }
+
+  //                if(jsonBuffer.isNull()){
+  //                 request->send(400, "application/json", "{\"config\":false}");
+  //                 return;
+  //               }
+  //               if(ConfigManager::saveConfig(jsonBuffer.as<String>())){
+  //                 request->send(200, "application/json", "{\"config\":true}");
+  //               }else{
+  //                 request->send(500, "application/json", "{\"config\":false}");
+  //               }
+  //               // Access the parsed JSON data
+  //               String ssid = jsonBuffer["ssid"];
+  //               String pass = jsonBuffer["pass"];
+
+  //               // Do something with the data
+  //               Serial.println("Received network credentials:");
+  //               Serial.println("SSID: " + ssid);
+  //               Serial.println("Password: " + pass);
+
+  //               // Respond to the client
+  //               request->send(200, "text/plain", "Network credentials saved");
+  //             }
+  //             else
+  //             {
+  //               Serial.println("No JSON data received");
+  //               request->send(400, "text/plain", "Bad Request");
+  //             } });
 
   server.onNotFound([](AsyncWebServerRequest *request)
                     { request->send(404, "text/plain", "Not found"); });

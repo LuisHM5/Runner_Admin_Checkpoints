@@ -1,7 +1,8 @@
 #pragma once
 #include <WiFi.h>
-#pragma once
+#include "AccessPoint.h"
 #include "config.h"
+#include "ConfigManager.h"
 
 class WifiSetup
 {

@@ -9,33 +9,44 @@ class FileUtility
 
 public:
   // Function to read the content of a file
-  static string readFile(const char *filename)
+  static String readFile(fs::FS &fs, const char *path)
   {
-    string content = "";
+    // cout << "Reading file: " << path << endl;
+    // Serial.printf("Reading file: %s\r\n", path);
 
-    // Create an input file stream
-    std::ifstream file(filename);
-
-    // Check if the file is open
-    if (file.is_open())
+    File file = fs.open(path);
+    if (!file || file.isDirectory())
     {
-      // Read the file line by line
-      std::string line;
-      while (getline(file, line))
-      {
-        // Append each line to the content string
-        content += line.c_str();
-        content += "\n"; // Add a newline character if needed
-      }
+      Serial.println("- failed to open file for reading");
+      return String();
+    }
 
-      // Close the file
-      file.close();
+    String fileContent = file.readString();
+    file.close();
+
+    return fileContent;
+  }
+
+  static void writeFile(fs::FS &fs, const char *path, const char *message)
+  {
+    // Serial.printf("Writing file: %s\r\n", path);
+
+    File file = fs.open(path, FILE_WRITE);
+    if (!file)
+    {
+      Serial.println("- failed to open file for writing");
+      return;
+    }
+
+    if (file.print(message))
+    {
+      Serial.println("- file written");
     }
     else
     {
-      cout << "Error opening file " << filename << endl;
+      Serial.println("- write failed");
     }
 
-    return content;
+    file.close();
   }
 };

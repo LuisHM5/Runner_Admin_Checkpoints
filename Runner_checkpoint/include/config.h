@@ -1,10 +1,14 @@
 #pragma once
 #include <cstdint>
+#include <string>
 
+using namespace std;
 namespace ConfigNet
 {
-  extern const char *ssid;
-  extern const char *pass;
+  extern string ssid;
+  extern string pass;
+  void setSSID(string ssid_);
+  void setPASS(string pass_);
 }
 
 namespace ConfigServer

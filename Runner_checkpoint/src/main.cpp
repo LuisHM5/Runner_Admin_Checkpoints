@@ -4,8 +4,6 @@
 #include <iostream>
 #include <unordered_map>
 #include <array>
-#include <iomanip>
-#include <sstream>
 // Web server
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
@@ -14,8 +12,8 @@
 #include "config.h"
 // Access Point
 #include <WiFi.h>
-#include "AccessPoint.h"
-#include "configAP.h"
+#include "ConfigManager.h"
+
 // Flash File System
 #include <SPIFFS.h>
 // Bus SPI
@@ -34,7 +32,7 @@
 // Modules
 #include "TimeClock.h"
 #include "CardsManager.h"
-
+#include "Parser.h"
 // SPI bus pins for NRF24L01 radio
 #define VSPI_CE 4
 #define VSPI_CSN 2
@@ -75,30 +73,14 @@ const uint64_t pipeAddress = 0xE8E8F0F0E1LL; // Must be the same in the receiver
 
 using namespace std;
 
-// UID to string converter
-std::string uidToString(const byte *uidBytes, byte bufferSize)
-{
-  std::stringstream uidStringStream;
-
-  for (byte i = 0; i < bufferSize; i++)
-  {
-    uidStringStream << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<int>(uidBytes[i]);
-  }
-
-  return uidStringStream.str();
-}
-
 void setup()
 {
   Serial.begin(9600);
-  SPIFFS.begin(true);
-  WifiSetup::ScanNet();
-  WifiSetup::Connect();
+  // SPIFFS.begin(true);
+  ConfigManager::begin();
+
   serverhttp = new ServerHTTP();
-  Serial.print("http://");
-  Serial.print(WiFi.localIP());
-  Serial.println((String) ":" + ConfigServer::port);
-  SetupAccessPoint::Created();
+
   // Buzzer setup
   pinMode(BUZZER_PIN, OUTPUT);
 
@@ -138,18 +120,10 @@ unsigned long timerDelay = 1000;
 
 void loop()
 {
-  if (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.println("Disconnected from WiFi");
-    //  Realizar acciones adicionales si se desconecta
-    WifiSetup::ScanNet();
-    WifiSetup::Connect();
-    // delete serverhttp;
-    // serverhttp = new ServerHTTP();
-    Serial.print("http://");
-    Serial.print(WiFi.localIP());
-    Serial.println((String) ":" + ConfigServer::port);
-  }
+  // if (WiFi.status() != WL_CONNECTED)
+  // {
+  //   ConfigManager::begin();
+  // }
 
   // Wait until race starts
   while (!TimeClock::GetStatus())
@@ -227,7 +201,7 @@ void loop()
   mfrc522.PICC_HaltA();
 
   // Transform the UID to string and save it
-  string UID_Tag = uidToString(newUid.uidByte, newUid.size);
+  string UID_Tag = Parser::uidToString(newUid.uidByte, newUid.size);
   cardsManager.AddCard(UID_Tag, Time, "#1");
   cardsManager.PrintAllCards();
   ServerHTTP::notifyClients(cardsManager.GetAllCardsJson());

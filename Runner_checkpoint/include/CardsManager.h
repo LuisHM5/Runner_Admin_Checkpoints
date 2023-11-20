@@ -67,13 +67,6 @@ public:
   String GetAllCardsJson()
   {
     DynamicJsonDocument doc(1024);
-    /*
-    MODEL
-     "cards": {
-    "73A8EAFC": { "punto1": "10:00:00", "punto2": "10:20:00" },
-    "538C1BF5": { "punto1": "10:00:00", "punto2": "10:20:00" }
-  }
-    */
     JsonObject cards = doc.createNestedObject("cards");
     for (auto &card : Cards_Readed)
     {

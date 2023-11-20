@@ -1,52 +1,59 @@
 #include "WifiSetup.h"
+unsigned long previousMillis = 0;
+const long interval = 10000;
 
 void WifiSetup::Connect()
 {
-  WiFi.begin(ConfigNet::ssid, ConfigNet::pass);
+  WiFi.begin(ConfigNet::ssid.c_str(), ConfigNet::pass.c_str());
   int tries = 5;
-  while (WiFi.status() != WL_CONNECTED && tries > 0)
+
+  unsigned long currentMillis = millis();
+  previousMillis = currentMillis;
+  Serial.println("Connecting to WiFi...");
+  while (WiFi.status() != WL_CONNECTED && tries > 0 && currentMillis - previousMillis < interval)
   {
-    tries--;
-    Serial.println("Connecting to WiFi...");
-    delay(1000);
-    if (WiFi.status() == WL_NO_SSID_AVAIL)
+    currentMillis = millis();
+    if (currentMillis - previousMillis >= interval)
     {
-      Serial.println("\nRed fuera de alcance.");
-      return;
+      previousMillis = currentMillis;
+      WifiSetup::ScanNet();
+      tries--;
     }
 
-    // Verificar si las credenciales son incorrectas
-    if (WiFi.status() == WL_CONNECT_FAILED)
+    if (tries == 0)
     {
-      Serial.println("\nCredenciales incorrectas.");
-      return;
-    }
-
-    if (WiFi.status() == WL_DISCONNECTED)
-    {
-      Serial.println("\nDesconectado.");
-      return;
-    }
-
-    if (WiFi.status() == WL_IDLE_STATUS)
-    {
-      Serial.println("\nIdle status.");
-      return;
+      break;
     }
   }
 
-  if (tries == 0)
+  if (WiFi.status() == WL_NO_SSID_AVAIL)
   {
-    Serial.println("No se pudo conectar a la red Wi-Fi.");
-    return;
+    Serial.println("\nRed fuera de alcance.");
   }
 
-  Serial.println("Connected to WiFi!");
+  // Verificar si las credenciales son incorrectas
+  if (WiFi.status() == WL_CONNECT_FAILED)
+  {
+    Serial.println("\nCredenciales incorrectas.");
+  }
+
+  if (WiFi.status() == WL_DISCONNECTED)
+  {
+    Serial.println("\nDesconectado.");
+  }
+
+  if (WiFi.status() == WL_IDLE_STATUS)
+  {
+    Serial.println("\nIdle status.");
+  }
+
   if (WiFi.status() == WL_CONNECTED)
   {
+    Serial.println("Connected to WiFi!");
     Serial.println("Conectado a la red Wi-Fi.");
     Serial.print(" Dirección IP: ");
     Serial.println(WiFi.localIP());
+    return;
   }
 }
 

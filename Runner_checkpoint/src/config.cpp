@@ -2,10 +2,17 @@
 
 namespace ConfigNet
 {
-  const char *ssid = "INFINITUM19C2_2.4";
-  const char *pass = "eARSU4pDyG";
-  // const char *ssid = "INFINITUM01CF";
-  // const char *pass = "SK35v3Kks5";
+  string ssid = "";
+  string pass = "";
+
+  void setSSID(string ssid_)
+  {
+    ssid = ssid_;
+  };
+  void setPASS(string pass_)
+  {
+    pass = pass_;
+  };
 }
 
 namespace ConfigServer

@@ -7,31 +7,70 @@
   <meta charset=utf-8>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    .btn-back {
+      margin-top: 10px;
+      background-color: rgb(14, 0, 102);
+    }
+  </style>
 </head>
 
 <body>
   <div class="topnav">
     <h1>ESP Wi-Fi Manager</h1>
   </div>
-  <div class="content">
+  <div class="content form-wifi">
     <div class="card-grid">
       <div class="card">
-        <form action="/" method="POST">
-          <p>
-            <label for="ssid">SSID</label>
-            <input type="text" id="ssid" name="ssid" placeholder="Nombre de la red"><br>
-            <label for="pass">Contraseña</label>
-            <input type="text" id="pass" name="pass" placeholder="Ingresa la contraseña"><br>
-            <label for="ip">IP Address</label>
-            <input type="text" id="ip" name="ip" value="192.168.1.200"><br>
-            <label for="gateway">Gateway Address</label>
-            <input type="text" id="gateway" name="gateway" value="192.168.1.1"><br>
-            <input type="submit" value="Aceptar">
-          </p>
-        </form>
+        <p>
+          <label for="ssid">SSID</label>
+          <input type="text" id="ssid" name="ssid" placeholder="Nombre de la red" required="required"><br>
+          <label for="pass">Contraseña</label>
+          <input type="text" id="pass" name="pass" placeholder="Ingresa la contraseña" required="required"><br>
+          <input id="btn-save-net" type="button" value="Aceptar" onclick="handle_save_net(event)">
+        </p>
       </div>
     </div>
+    <a href="/index.html" class="main-btn red-btn btn-back">
+      Regresar
+    </a>
   </div>
+  <script>
+    const full_url = `http://${window.location.hostname}:${window.location.port}`;
+    function handle_save_net(event) {
+      const url = full_url + "/save-network";
+      const method = "POST";
+
+      let data = {
+        ssid: document.getElementById("ssid").value,
+        pass: document.getElementById("pass").value
+      };
+      if (data.ssid == "" || data.pass == "") {
+        alert("Ingresa los datos de la red");
+        return;
+      }
+      console.log(data);
+      fetch(url, {
+        method,
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          let { config } = data;
+
+          if (config) {
+            alert("Se guardo la red " + config.ssid + " correctamente" + "\n" + "Reiniciando...");
+          } else {
+            alert("No se pudo guardar la red revise la configuración");
+          }
+
+        })
+        .catch((error) => alert(error + " No se pudo guardar la red"))
+    }
+  </script>
 </body>
 
 </html>
