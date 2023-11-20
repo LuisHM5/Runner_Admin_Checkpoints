@@ -96,7 +96,9 @@ void setup()
   // Radio setup
   radio.begin(vspi);
   radio.openWritingPipe(pipeAddress); // Abre un tubo de escritura
-  radio.setPALevel(RF24_PA_LOW);      // Establece la potencia de la señal
+  // radio.setPALevel(RF24_PA_LOW);      // Establece la potencia de la señal
+  radio.setPALevel(RF24_PA_MAX); // Establece la potencia de la señal
+  radio.setDataRate(RF24_250KBPS);
   radio.stopListening();
 
   // Lector RFID setup
