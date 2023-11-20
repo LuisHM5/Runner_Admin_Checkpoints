@@ -123,7 +123,7 @@ unsigned long timerDelay = 1000;
 
 void loop()
 {
-  if (WiFi.status() != WL_CONNECTED)
+  if (WiFi.status() != WL_CONNECTED && WiFi.getMode() != WIFI_AP)
   {
     ConfigManager::begin();
   }

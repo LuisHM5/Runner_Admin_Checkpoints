@@ -8,13 +8,7 @@ html {
   width: calc(100vw);
   height: calc(100vh - 71.6px);
 }
-/* .main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-} */
+
 .container-btn {
   display: flex;
   margin-top: 4.5rem;
@@ -31,7 +25,6 @@ html {
   background-color: #258b29;
   border: none;
   color: white;
-  /* width: 300px; */
   width: calc(100vw - 300px);
   min-width: 270px;
   height: 100px;
@@ -59,11 +52,11 @@ html {
   position: fixed;
   text-align: center;
   bottom: 0;
-  right: 0;
+  right: 30px;
   margin: 10px;
-  width: 200px;
+  width: 150px;
   height: 50px;
-  padding: 10px 30px;
+  padding: 5px 15px;
   font-size: 1.4rem;
   text-align: center;
 }
@@ -256,4 +249,23 @@ td {
   align-items: center;
   justify-content: center;
   margin-top: 2rem;
+}
+
+/* on mobile */
+@media only screen and (max-width: 600px) {
+  .main-btn {
+    width: calc(100vw - 30px);
+    min-width: 270px;
+    height: 60px;
+    padding: 10px 10px;
+    font-size: 1.5rem;
+  }
+  .red-btn {
+    right: 15px;
+    width: 50px;
+    min-width: 160px;
+    padding: 0px;
+    height: 50px;
+    font-size: 1rem;
+  }
 }
