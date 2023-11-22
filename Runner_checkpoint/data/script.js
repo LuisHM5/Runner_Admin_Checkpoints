@@ -25,12 +25,6 @@ function initWebSocket() {
   websocket.onmessage = onMessage;
 }
 
-// When websocket is established, call the getReadings() function
-// function onOpen(event) {
-//   console.log("Connection opened");
-//   getReadings();
-// }
-
 function onClose(event) {
   console.log("Connection closed");
   setTimeout(initWebSocket, 2000);

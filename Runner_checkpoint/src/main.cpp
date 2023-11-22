@@ -76,19 +76,20 @@ using namespace std;
 void setup()
 {
   Serial.begin(9600);
-  // SPIFFS.begin(true);
+
   ConfigManager::begin();
 
   serverhttp = new ServerHTTP();
 
   // Buzzer setup
   pinMode(BUZZER_PIN, OUTPUT);
-
   ledcSetup(0, 1000, 10); // Configura el canal LEDC 0
   ledcAttachPin(BUZZER_PIN, 0);
 
-  // SPI bus setup
+  // == SPI bus setup ==
+  // SPI RFID setup
   hspi->begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_CS);
+  // SPI Radio setup
   vspi->begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_CSN);
   pinMode(vspi->pinSS(), OUTPUT); // VSPI SS
   pinMode(hspi->pinSS(), OUTPUT); // HSPI SS
@@ -96,8 +97,6 @@ void setup()
   // Radio setup
   radio.begin(vspi);
   radio.openReadingPipe(1, pipeAddress); // Abre un tubo de lectura en el mismo canal que el transmisor
-  // radio.setPALevel(RF24_PA_MIN);
-  // radio.setDataRate(RF24_1MBPS);
   radio.setPALevel(RF24_PA_MAX);
   radio.setDataRate(RF24_250KBPS);
   radio.startListening(); // Inicia la escucha
@@ -118,8 +117,6 @@ void setup()
     Serial.println(F("DEFECT or UNKNOWN"));
   Serial.println();
 }
-unsigned long lastTime = 0;
-unsigned long timerDelay = 1000;
 
 void loop()
 {

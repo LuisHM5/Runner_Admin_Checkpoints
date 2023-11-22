@@ -1,5 +1,5 @@
 #include "Server.hpp"
-
+// WEB API REST SERVER WITH SOCKETS
 AsyncWebServer ServerHTTP::server(ConfigServer::port);
 AsyncWebSocket ServerHTTP::ws("/ws");
 
