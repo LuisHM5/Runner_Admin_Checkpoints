@@ -23,3 +23,8 @@ Desarrollar en lenguaje C++ un prototipo de un sistema embebido para la detecci�
 ### Puntos de control
 
 ![Puntos de control](Diseños,%20Reportes,%20etc/images/Puntos%20de%20control.png)
+
+### Diagramas
+
+![Diagrama 1 circuito](Diseños,%20Reportes,%20etc/images/IOT_Diagrama_1.png)
+![Diagrama 2 circuito](Diseños,%20Reportes,%20etc/images/IOT_Diagrama_2.png)
